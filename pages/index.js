@@ -1,3 +1,4 @@
+//import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
 
 const DUMMY_MEETUPS = [
@@ -19,8 +20,36 @@ const DUMMY_MEETUPS = [
   },
 ];
 
-function HomePage() {
-  return <MeetupList meetups={DUMMY_MEETUPS} />;
+function HomePage(props) {
+//   const [loadedMeetups, setLoadedMeetups] = useState([]);
+// useEffect(() => {
+//  //send http req & fetch data
+//   setLoadedMeetups(DUMMY_MEETUPS);
+// }, [])
+// return <MeetupList meetups={loadedMeetups} />;
+
+  return <MeetupList meetups={props.meetups} />;
+
+}
+
+//* ** Data fetching for static Pages ** 
+export async function getStaticProps() {
+//fetch data from an API
+return {
+  props: {
+    meetups: DUMMY_MEETUPS
+  }
+}
 }
 
 export default HomePage;
+
+
+//* ** Data fetching for static Pages ** 
+//getStaticProps() prepare props for the HomePage
+//this code is executing during the build process not on the server & not on the client
+//with that our DUMMY_MEETUPS will be loaded and prepared in getStaticProps and the they wil be set as props for HomePage component
+//we move the data fetching away from the client to the server-side (to the during the built process side)
+//if we view the page source (inspect element) we see that we no longer have an empty unordered list (the case that we saw using useEffect())
+//now this is pre-rendered, and it now contains the full HTML code (it's great for search engine)
+//data is not fetched in  a second component render cycle on the client, but initially. 
