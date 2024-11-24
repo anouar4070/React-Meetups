@@ -2,6 +2,8 @@ import { MongoClient } from "mongodb";
 
 //import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
+import { Fragment } from "react";
+import Head from "next/head";
 
 // const DUMMY_MEETUPS = [
 //   {
@@ -30,7 +32,18 @@ function HomePage(props) {
   // }, [])
   // return <MeetupList meetups={loadedMeetups} />;
 
-  return <MeetupList meetups={props.meetups} />;
+  return (
+    <Fragment>
+      <Head>
+        <title>React Meetups</title>
+        <meta
+          name="description"
+          content="Browse a huge list of highly active React meetups!"
+        />
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </Fragment>
+  );
 }
 
 //* ** Server-side Rendering **
@@ -68,7 +81,7 @@ export async function getStaticProps() {
         title: meetup.title,
         address: meetup.address,
         image: meetup.image,
-        id: meetup._id.toString()
+        id: meetup._id.toString(),
       })),
     },
     revalidate: 10,
