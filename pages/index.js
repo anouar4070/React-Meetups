@@ -1,24 +1,26 @@
+import { MongoClient } from "mongodb";
+
 //import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
 
-const DUMMY_MEETUPS = [
-  {
-    id: "m1",
-    title: "A First Meetup",
-    image:
-      "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    address: "Habib Bourguiba avenue, 4081 Sousse",
-    description: "This is a first meetup!",
-  },
-  {
-    id: "m2",
-    title: "A second Meetup",
-    image:
-      "https://images.pexels.com/photos/2581922/pexels-photo-2581922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    address: "Freedom avenue, 4000 Tunis",
-    description: "This is a second meetup!",
-  },
-];
+// const DUMMY_MEETUPS = [
+//   {
+//     id: "m1",
+//     title: "A First Meetup",
+//     image:
+//       "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+//     address: "Habib Bourguiba avenue, 4081 Sousse",
+//     description: "This is a first meetup!",
+//   },
+//   {
+//     id: "m2",
+//     title: "A second Meetup",
+//     image:
+//       "https://images.pexels.com/photos/2581922/pexels-photo-2581922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+//     address: "Freedom avenue, 4000 Tunis",
+//     description: "This is a second meetup!",
+//   },
+// ];
 
 function HomePage(props) {
   //   const [loadedMeetups, setLoadedMeetups] = useState([]);
@@ -44,26 +46,36 @@ function HomePage(props) {
 //   };
 // }
 
-
-
 //* ** Data fetching for static Pages **
 export async function getStaticProps() {
-//fetch data from an API
-return {
-  props: {
-    meetups: DUMMY_MEETUPS
-  },
-  revalidate: 10
-}
+  //fetch data from an API
+  //fetch('/api/meetups');// we don't need it because the code in getStaticProps() will only run on the server.
+
+  const client = await MongoClient.connect(
+    "mongodb+srv://ahmed:ahmedanouar@cluster0.yixb9.mongodb.net/meetups?retryWrites=true&w=majority&appName=Cluster0"
+  );
+  const db = client.db();
+
+  const meetupsCollection = db.collection("meetups");
+
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
+
+  return {
+    props: {
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString()
+      })),
+    },
+    revalidate: 10,
+  };
 }
 
 export default HomePage;
-
-
-
-
-
-
 
 //* ** Data fetching for static Pages **
 //getStaticProps() prepare props for the HomePage
