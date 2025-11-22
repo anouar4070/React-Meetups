@@ -103,7 +103,7 @@ export default HomePage;
 //getStaticProps() prepare props for the HomePage
 //this code is executing during the build process not on the server & not on the client
 //with that our DUMMY_MEETUPS will be loaded and prepared in getStaticProps and they will be set as props for HomePage component
-//we move the data fetching away from the client to the server-side (to the during the built process side)
-//if we view the page source (inspect element) we see that we no longer have an empty unordered list (the case that we saw using useEffect())
-//now this is pre-rendered, and it now contains the full HTML code (it's great for search engine)
+//we move the data fetching away from the client to the server-side (to the during built process side)
+//& if we view the page source (inspect element) we see that we no longer have an empty unordered list (the case that we saw using useEffect())
+//& now this is pre-rendered, and it now contains the full HTML code (it's great for search engine)
 //data is not fetched in  a second component render cycle on the client, but initially.
