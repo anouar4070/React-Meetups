@@ -73,9 +73,7 @@ export async function getStaticProps() {
   //   };
   //fetch('/api/meetups');/// we don't need it because the code in getStaticProps() will only run on the server.
 
-  const client = await MongoClient.connect(
-    "mongodb+srv://ahmed:ahmedanouar@cluster0.yixb9.mongodb.net/meetups?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  const client = await MongoClient.connect(process.env.MONGODB_URI);
   const db = client.db();
 
   const meetupsCollection = db.collection("meetups");
