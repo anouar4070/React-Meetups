@@ -1,6 +1,4 @@
 import { MongoClient } from "mongodb";
-
-//import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
 import { Fragment } from "react";
 import Head from "next/head";
